@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\QuehaceresController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('quehaceres')->group(function (){
+    Route::get('/index', [QuehaceresController::class, 'index'])->name('quehaceres_index');
+    Route::get('/show', [QuehaceresController::class, 'show'])->name('quehaceres_show');
+
+    Route::post('/store', [QuehaceresController::class, 'store'])->name('quehaceres_store');
+
+    Route::put('/update', [QuehaceresController::class, 'update'])->name('quehaceres_update');
+
+    Route::delete('/delet', [QuehaceresController::class, 'destroy'])->name('quehaceres_delete');
 });
