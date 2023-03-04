@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('quehaceres', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name', 150);
+            $table->date('deadline');
+            $table->timestamp('create_at')->useCurrent();
+            $table->timestamp('update_at')->nullable()->useCurrentOnUpdate();
         });
     }
 
