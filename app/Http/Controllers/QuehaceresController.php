@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Validate_Quehaceres;
 use App\Models\Quehaceres;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,8 +24,11 @@ class QuehaceresController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(Quehaceres $quehaceres) {
-        //
+    public function show(Request $request) {
+        //Validaciones
+        $this->validate_id($request);
+
+        return DB::select('SELECT * from quehaceres where id = ? limit 1', [$request->id]);
     }
 
     /**
@@ -39,5 +43,11 @@ class QuehaceresController extends Controller {
      */
     public function destroy(Quehaceres $quehaceres) {
         //
+    }
+
+    private function validate_id(Request $request){
+        $request->validate([
+            'id' => 'required|numeric'
+        ]);
     }
 }
