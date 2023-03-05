@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\Validate_Quehaceres;
 use App\Models\Quehaceres;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +19,14 @@ class QuehaceresController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        //
+        $this->validate_name($request);
+        $this->validate_deadline($request);
+
+        //cambiar formato de la fecha para poder ser Insertada en Mysql
+        $deadline = $this->convert_data($request->deadline);
+
+        return DB::insert('INSERT into quehaceres(name, deadline)
+        values(?, ?)', [$request->name, $deadline]);
     }
 
     /**
@@ -45,9 +53,25 @@ class QuehaceresController extends Controller {
         //
     }
 
-    private function validate_id(Request $request){
+    private function convert_data($date){
+        return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m/d');
+    }
+
+    private function validate_id(Request $request): void {
         $request->validate([
             'id' => 'required|numeric'
+        ]);
+    }
+
+    private function validate_name(Request $request): void {
+        $request->validate([
+            'name' => 'required|regex:/^[\w\d ]+$/|min:4|max:150'
+        ]);
+    }
+
+    private function validate_deadline(Request $request): void {
+        $request->validate([
+            'deadline' => 'required|date_format:d/m/Y'
         ]);
     }
 }
