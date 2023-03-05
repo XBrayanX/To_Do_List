@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 150);
             $table->date('deadline');
+            $table->enum('complete', ['si', 'no'])->default('no');
             $table->timestamp('create_at')->useCurrent();
             $table->timestamp('update_at')->nullable()->useCurrentOnUpdate();
         });
