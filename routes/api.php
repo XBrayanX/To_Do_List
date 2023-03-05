@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\QuehaceresController;
+use App\Http\Middleware\Validate_Quehaceres;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('quehaceres')->group(function (){
     Route::get('/index', [QuehaceresController::class, 'index'])->name('quehaceres_index');
-    Route::get('/show', [QuehaceresController::class, 'show'])->name('quehaceres_show');
+    Route::get('/show/{id}', [QuehaceresController::class, 'show'])->name('quehaceres_show');
 
     Route::post('/store', [QuehaceresController::class, 'store'])->name('quehaceres_store');
 
