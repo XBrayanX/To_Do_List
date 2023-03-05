@@ -24,5 +24,5 @@ Route::prefix('quehaceres')->group(function (){
 
     Route::put('/update', [QuehaceresController::class, 'update'])->name('quehaceres_update');
 
-    Route::delete('/delet', [QuehaceresController::class, 'destroy'])->name('quehaceres_delete');
+    Route::delete('/delete', [QuehaceresController::class, 'destroy'])->name('quehaceres_delete');
 });
