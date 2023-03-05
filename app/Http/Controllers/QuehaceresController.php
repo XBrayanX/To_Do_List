@@ -43,7 +43,38 @@ class QuehaceresController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, Quehaceres $quehaceres) {
-        //
+        //Validaciones
+        $this->validate_id($request);
+        $request->validate([
+            'name'     => 'sometimes|regex:/^[\w\d ]+$/|min:4|max:150',
+            'deadline' => 'sometimes|date_format:d/m/Y'
+        ]);
+
+        $data = [
+            'name'     => $request->name ?? null,
+            'deadline' => $request->deadline ?? null
+        ];
+
+        //Eliminar Valores Vacíos
+        $data = array_filter($data);
+
+        if (count($data) > 0) {
+            if (!empty($data['deadline'])) {
+                //Convertir fecha
+                $data['deadline'] = $this->convert_data($data['deadline']);
+            }
+
+            //Crear Consulta
+            $query = $this->create_query($data);
+
+            //Ejecutar Consulta
+            $update = DB::update("UPDATE quehaceres
+            set $query
+            where id = ?
+            limit 1", [$request->id]);
+
+            return $update;
+        }
     }
 
     /**
@@ -53,10 +84,23 @@ class QuehaceresController extends Controller {
         //
     }
 
-    private function convert_data($date){
+    //Funciones Adicionales
+    //--------------------------------------------------------------------------------------------------
+    private function convert_data($date) {
         return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m/d');
     }
 
+    private function create_query(array $data):string {
+        $string = implode(',', array_map(function ($key, $value) {
+            return "$key = '$value'";
+        }, array_keys($data), $data));
+
+        return $string;
+    }
+
+
+    //Funciones de Validación
+    //--------------------------------------------------------------------------------------------------
     private function validate_id(Request $request): void {
         $request->validate([
             'id' => 'required|numeric'
