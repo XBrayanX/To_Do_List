@@ -80,8 +80,10 @@ class QuehaceresController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Quehaceres $quehaceres) {
-        //
+    public function destroy(Request $request) {
+        $this->validate_id($request);
+        return DB::delete('DELETE from quehaceres
+        where id = ? limit 1', [$request->id]);
     }
 
     //Funciones Adicionales
@@ -90,7 +92,7 @@ class QuehaceresController extends Controller {
         return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m/d');
     }
 
-    private function create_query(array $data):string {
+    private function create_query(array $data): string {
         $string = implode(',', array_map(function ($key, $value) {
             return "$key = '$value'";
         }, array_keys($data), $data));
