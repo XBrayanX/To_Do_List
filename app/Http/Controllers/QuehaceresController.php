@@ -42,17 +42,19 @@ class QuehaceresController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Quehaceres $quehaceres) {
+    public function update(Request $request) {
         //Validaciones
         $this->validate_id($request);
         $request->validate([
             'name'     => 'sometimes|regex:/^[\w\d ]+$/|min:4|max:150',
-            'deadline' => 'sometimes|date_format:d/m/Y'
+            'deadline' => 'sometimes|date_format:d/m/Y',
+            'complete' => 'sometimes|in:si,no'
         ]);
 
         $data = [
             'name'     => $request->name ?? null,
-            'deadline' => $request->deadline ?? null
+            'deadline' => $request->deadline ?? null,
+            'complete' => $request->complete ?? null
         ];
 
         //Eliminar Valores Vacíos
