@@ -12,7 +12,9 @@ class QuehaceresController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        return DB::select('SELECT * from quehaceres');
+        $data = DB::select('SELECT * from quehaceres');
+
+        return $this->response_api(true, $data);
     }
 
     /**
@@ -25,8 +27,10 @@ class QuehaceresController extends Controller {
         //cambiar formato de la fecha para poder ser Insertada en Mysql
         $deadline = $this->convert_data($request->deadline);
 
-        return DB::insert('INSERT into quehaceres(name, deadline)
+        DB::insert('INSERT into quehaceres(name, deadline)
         values(?, ?)', [$request->name, $deadline]);
+
+        return $this->response_api(true);
     }
 
     /**
@@ -36,7 +40,9 @@ class QuehaceresController extends Controller {
         //Validaciones
         $this->validate_id($request);
 
-        return DB::select('SELECT * from quehaceres where id = ? limit 1', [$request->id]);
+        $data = DB::select('SELECT * from quehaceres where id = ? limit 1', [$request->id]);
+
+        return $this->response_api(true, $data);
     }
 
     /**
@@ -75,21 +81,33 @@ class QuehaceresController extends Controller {
             where id = ?
             limit 1", [$request->id]);
 
-            return $update;
+            return $this->response_api(true);
         }
+        return $this->response_api(false);
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request) {
+        //Validación
         $this->validate_id($request);
-        return DB::delete('DELETE from quehaceres
+
+        DB::delete('DELETE from quehaceres
         where id = ? limit 1', [$request->id]);
+
+        return $this->response_api(true);
     }
 
     //Funciones Adicionales
     //--------------------------------------------------------------------------------------------------
+    private function response_api(bool $status, array|null $data = null, int $code = 200) {
+        return response()->json([
+            'success'    => $status,
+            'quehaceres' => $data,
+        ], $code);
+    }
+
     private function convert_data($date) {
         return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m/d');
     }
