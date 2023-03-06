@@ -3,11 +3,16 @@ window.addEventListener('load', () => {
     let template = document.querySelector('#fil_template');
     let fil_tbody = document.querySelector('#fil_tbody');
     let btn_insert = document.querySelector('#btn_insert');
+    let btn_theme = document.querySelector('#btn_theme');
 
+    //Eventos de Escucha
     btn_insert.addEventListener('click', Store);
+    btn_theme.addEventListener('click', change_theme);
 
     Fill_Table();
 
+    //Funciones para Generar Consultas
+    //--------------------------------------------------------------------------------------------------
     async function Store() {
         let name = document.querySelector('#name');
         let deadline = document.querySelector('#deadline');
@@ -25,7 +30,7 @@ window.addEventListener('load', () => {
         if (data_result['success'] === true) {
             data_array = {
                 'name': name.value,
-                'deadline': deadline.replaceAll('-','/')
+                'deadline': deadline.replaceAll('-', '/')
             };
             Insert_Table(template, fil_tbody, data_array, false);
 
@@ -43,11 +48,27 @@ window.addEventListener('load', () => {
         });
     }
 
+    //Funciones de Ayuda
+    //--------------------------------------------------------------------------------------------------
+    function change_theme() {
+        let body = document.querySelector('body');
+        let icon = document.querySelector('#btn_theme > i');
+
+        if (body.getAttribute('data-bs-theme') === 'light') {
+            body.setAttribute('data-bs-theme', 'dark');
+            icon.setAttribute('class', 'fa-xl fa-solid fa-sun');
+            
+        } else {
+            body.setAttribute('data-bs-theme', 'light');
+            icon.setAttribute('class', 'fa-xl fa-solid fa-moon');
+        }
+    }
+
     function Convert_Deadline(string) {
         return string.split('-').reverse().join('/');
     }
 
-    function Show_Message(text){
+    function Show_Message(text) {
         let content = document.querySelector('.content');
         let alert_template = document.querySelector('#alert_template');
         let clone_template = alert_template.content.cloneNode(true);
