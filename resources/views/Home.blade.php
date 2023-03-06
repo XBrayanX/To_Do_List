@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <title>Lista de Quehaceres</title>
 
+    <link rel="icon" href="{{asset('favicon.svg')}}" type="image/svg">
     {{-- CSS --}}
     <link rel="stylesheet" href="{{asset('Css/Home.min.css')}}">
 
@@ -23,14 +24,15 @@
     <header class="container-xxl user-select-none">
         <nav class="row navbar navbar-expand-lg p-1 bg-body-tertiary">
             <div class="col">
-                <a class="navbar-brand fw-bold" href="" target="_blank">Brayan Aguilar</a>
+                <i class="fa-solid fa-terminal"></i>
+                <a class="navbar-brand fw-bold" href="https://xbrayanx.github.io/brayan.github.io/" target="_blank">Brayan Aguilar</a>
             </div>
 
             <div class="col d-flex justify-content-end align-items-center">
                 <a id="btn_theme" class="nav-link">
                     <i class="fa-xl fa-solid fa-moon"></i>
                 </a>
-                <a class="ms-4 nav-link" href="" target="_blank">
+                <a class="ms-4 nav-link" href="https://github.com/XBrayanX/Lista_Quehaceres" target="_blank">
                     <i class="fa-xl fa-brands fa-github"></i>
                 </a>
                 <a class="ms-3 nav-link fw-bold fs-5" href="" target="_blank">Api</a>
@@ -47,7 +49,7 @@
                     <div id="container_name">
                         <input type="text" id="name" class="form-control" placeholder="Nueva Tarea" maxlength=60>
                     </div>
-                    
+
                     <div class="d-flex">
                         <span class="input-group-text user-select-none">Fecha limite</span>
                         <input type="date" id="deadline" class="form-control">
