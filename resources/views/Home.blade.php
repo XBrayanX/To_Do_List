@@ -25,13 +25,18 @@
 
         <section class="content mt-3">
             <h2 class="h2 border-4 border-bottom mb-2">Lista de Quehaceres</h2>
-            <div class="input-group mb-2 w-50">
-                <input type="text" class="form-control" placeholder="Nueva Tarea" 
-                aria-label="tarea" aria-describedby="basic-addon1" maxlength=60>
-                <div class="input-group-prepend">
-                    <button id="btn_insert" type="button" class="btn btn-success">+</button>
+
+            <form class="w-50">
+                <div class="input-group mb-3">
+                    <input type="text" id="name" class="form-control" placeholder="Nueva Tarea" maxlength=60>
+                    <span class="input-group-text">Fecha limite</span>
+                    <input type="date" id="deadline" class="form-control">
+
+                    <div class="col-auto ms-2">
+                        <button id="btn_insert" type="button" class="btn btn-success">+</button>
+                    </div>
                 </div>
-            </div>
+            </form>
 
             <table class="table">
                 <thead>
