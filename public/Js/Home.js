@@ -28,7 +28,7 @@ window.addEventListener('load', () => {
 
         let data_result = await Make_Consult('store', 'post', data);
 
-        //Agregar el nuevo dato a la tabla
+        // //Agregar el nuevo dato a la tabla
         if (data_result['success'] === true) {
             data_array = {
                 'name': name.value,
@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
             };
             Insert_Table(template, fil_tbody, data_array, false);
 
-            Show_Message('Agregado');
+            Show_Message_Time('Agregado');
         }
     }
 
@@ -76,7 +76,7 @@ window.addEventListener('load', () => {
 
             if (data_result['success'] === true) {
                 Delete_Fil_Container(data);
-                Show_Message('Dato Eliminado');
+                Show_Message_Time('Dato Eliminado');
             }
 
         } else if (index > 1) {//Borrar Varios ID
@@ -86,7 +86,7 @@ window.addEventListener('load', () => {
                 data_id.forEach(element => {
                     Delete_Fil_Container(element);
                 });
-                Show_Message('Datos Eliminados');
+                Show_Message_Time('Datos Eliminados');
             }
         }
     }
@@ -115,14 +115,23 @@ window.addEventListener('load', () => {
         return string.split('-').reverse().join('/');
     }
 
-    function Show_Message(text) {
-        let content = document.querySelector('.content');
-        let alert_template = document.querySelector('#alert_template');
-        let clone_template = alert_template.content.cloneNode(true);
-        let alert_text = clone_template.querySelector('#alert_text');
-
-        alert_text.textContent = text;
-        content.appendChild(clone_template);
+    function Show_Message_Time(text, icon = 'success') {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: icon,
+            title: text
+          })
     }
 
     function Insert_Table(template, body_element, element, convert_deadline = true) {
