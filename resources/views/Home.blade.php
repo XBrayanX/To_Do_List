@@ -79,9 +79,9 @@
                         <tr id="fil_container">
                             <td id="fil_id" value="" readonly disabled hidden></td>
                             {{-- <input  type="text"  > --}}
-                            <td id="fil_check_select">
+                            <td>
                                 <div class="form-check">
-                                    <input class="form-check-input select" type="checkbox">
+                                    <input id="fil_check_select" class="form-check-input fil_check_select" type="checkbox">
                                 </div>
                             </td>
                             <td id="fil_name"></td>
@@ -96,7 +96,7 @@
                 </tbody>
             </table>
 
-            <div class="options position-fixed bottom-0 end-0 m-2 invisible">
+            <div class="options position-fixed bottom-0 end-0 m-2">
                 <button type="button" class="btn btn-primary" id="btn_select_all">Marcar Todos</button>
                 <button type="button" class="btn btn-danger" id="btn_delete">
                     <i class="fa fa-trash"></i>
