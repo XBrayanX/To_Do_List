@@ -53,7 +53,7 @@ class QuehaceresController extends Controller {
         $this->validate_id($request);
         $request->validate([
             'name'     => 'sometimes|regex:/^[\w\d ]+$/|min:4|max:150',
-            'deadline' => 'sometimes|date_format:d/m/Y',
+            'deadline' => 'sometimes|date_format:d-m-Y',
             'complete' => 'sometimes|in:si,no'
         ]);
 
@@ -109,7 +109,7 @@ class QuehaceresController extends Controller {
     }
 
     private function convert_data($date) {
-        return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m/d');
+        return Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
     }
 
     private function create_query(array $data): string {
@@ -137,7 +137,7 @@ class QuehaceresController extends Controller {
 
     private function validate_deadline(Request $request): void {
         $request->validate([
-            'deadline' => 'required|date_format:d/m/Y'
+            'deadline' => 'required|date_format:d-m-Y'
         ]);
     }
 }
