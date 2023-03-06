@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
 
+    {{-- CSS --}}
+    <link rel="stylesheet" href="{{asset('Css/Home.min.css')}}">
+
     {{-- Javascript --}}
     <script src="{{asset('js/Home.js')}}"></script>
 
@@ -16,20 +19,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body data-bs-theme="light">
-    <header class="container-xxl">
+    <header class="container-xxl user-select-none">
         <nav class="row navbar navbar-expand-lg p-1 bg-body-tertiary">
             <div class="col">
                 <a class="navbar-brand fw-bold" href="" target="_blank">Brayan Aguilar</a>
             </div>
 
             <div class="col d-flex justify-content-end align-items-center">
-                <a id="btn_theme" class="btn rounded-fill">
-                    <i class="fa-xl fa-solid fa-sun"></i>
+                <a id="btn_theme" class="nav-link">
+                    <i class="fa-xl fa-solid fa-moon"></i>
                 </a>
-                <a class="ms-2 nav-link" href="" target="_blank">
+                <a class="ms-4 nav-link" href="" target="_blank">
                     <i class="fa-xl fa-brands fa-github"></i>
                 </a>
-                <a class="ms-3 nav-link fw-bold" href="" target="_blank">Api</a>
+                <a class="ms-3 nav-link fw-bold fs-5" href="" target="_blank">Api</a>
             </div>
         </nav>
     </header>
@@ -43,7 +46,7 @@
                 </div>
             </template>
 
-            <h2 class="h2 border-4 border-bottom mb-2">Lista de Quehaceres</h2>
+            <h2 class="h2 border-4 border-bottom mb-2 user-select-none">Lista de Quehaceres</h2>
 
             <form>
                 <div class="input-group mb-3">
@@ -52,7 +55,7 @@
                     </div>
                     
                     <div class="d-flex">
-                        <span class="input-group-text">Fecha limite</span>
+                        <span class="input-group-text user-select-none">Fecha limite</span>
                         <input type="date" id="deadline" class="form-control">
                     </div>
 
