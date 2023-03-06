@@ -10,6 +10,7 @@
 
     {{-- Javascript --}}
     <script src="{{asset('js/Home.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -39,13 +40,6 @@
 
     <div class="container-xxl mt-4">
         <section class="content">
-            <template id="alert_template">
-                <div class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0" role="alert">
-                    <strong id="alert_text"></strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </template>
-
             <h2 class="h2 border-4 border-bottom mb-2 user-select-none">Lista de Quehaceres</h2>
 
             <form>
@@ -97,7 +91,7 @@
             </table>
 
             <div class="options position-fixed bottom-0 end-0 m-2">
-                <button type="button" class="btn btn-primary" id="btn_select_all">Marcar Todos</button>
+                <button type="button" class="btn btn-danger" id="btn_select_all">Eliminar Todos</button>
                 <button type="button" class="btn btn-danger" id="btn_delete">
                     <i class="fa fa-trash"></i>
                 </button>
