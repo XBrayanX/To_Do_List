@@ -26,9 +26,10 @@
         <section class="content mt-3">
             <h2 class="h2 border-4 border-bottom mb-2">Lista de Quehaceres</h2>
             <div class="input-group mb-2 w-50">
-                <input type="text" class="form-control" placeholder="Nueva Tarea" aria-label="tarea" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Nueva Tarea" 
+                aria-label="tarea" aria-describedby="basic-addon1" maxlength=60>
                 <div class="input-group-prepend">
-                    <button type="button" class="btn btn-success">+</button>
+                    <button id="btn_insert" type="button" class="btn btn-success">+</button>
                 </div>
             </div>
 
