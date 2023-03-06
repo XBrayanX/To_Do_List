@@ -32,7 +32,7 @@ class QuehaceresController extends Controller {
         $last_id = DB::select('SELECT id from quehaceres
         order by id desc limit 1');
 
-        return $this->response_api(true, ['last_id' => $last_id]);
+        return $this->response_api(true, $last_id);
     }
 
     /**

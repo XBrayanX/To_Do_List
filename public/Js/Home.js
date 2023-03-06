@@ -33,6 +33,7 @@ window.addEventListener('load', () => {
         // //Agregar el nuevo dato a la tabla
         if (data_result['success'] === true) {
             data_array = {
+                'id' : data_result['quehaceres'][0]['id'],
                 'name': name.value,
                 'deadline': deadline.replaceAll('-', '/')
             };
