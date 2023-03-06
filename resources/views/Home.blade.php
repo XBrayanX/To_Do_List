@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
 
+    {{-- Javascript --}}
+    <script src="{{asset('js/Home.js')}}"></script>
+
     {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -38,21 +41,25 @@
                         <th scope="col">Completado</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input select" type="checkbox">
-                            </div>
-                        </td>
-                        <td>Descripción Tarea</td>
-                        <td>05/03/2023</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch">
-                            </div>
-                        </td>
-                    </tr>
+                <tbody id="fil_tbody">
+                    <template id="fil_template">
+                        <tr id="fil_container">
+                            <td id="fil_id" value="" readonly disabled hidden></td>
+                            {{-- <input  type="text"  > --}}
+                            <td id="fil_check_select">
+                                <div class="form-check">
+                                    <input class="form-check-input select" type="checkbox">
+                                </div>
+                            </td>
+                            <td id="fil_name"></td>
+                            <td id="fil_deadline"></td>
+                            <td id="fil_complete">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch">
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
                 </tbody>
             </table>
 
