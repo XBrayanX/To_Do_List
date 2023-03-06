@@ -23,7 +23,7 @@
             </div>
 
             <div class="col d-flex justify-content-end align-items-center">
-                <a class="btn rounded-fill">
+                <a id="btn_theme" class="btn rounded-fill">
                     <i class="fa-xl fa-solid fa-sun"></i>
                 </a>
                 <a class="ms-2 nav-link" href="" target="_blank">
