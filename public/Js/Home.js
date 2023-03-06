@@ -4,10 +4,12 @@ window.addEventListener('load', () => {
     let fil_tbody = document.querySelector('#fil_tbody');
     let btn_insert = document.querySelector('#btn_insert');
     let btn_theme = document.querySelector('#btn_theme');
+    let btn_delete = document.querySelector('#btn_delete');
 
     //Eventos de Escucha
     btn_insert.addEventListener('click', Store);
-    btn_theme.addEventListener('click', change_theme);
+    btn_theme.addEventListener('click', Change_Theme);
+    btn_delete.addEventListener('click', Delete_Items);
 
     Fill_Table();
 
@@ -48,16 +50,61 @@ window.addEventListener('load', () => {
         });
     }
 
+    async function Delete_Items() {
+        let fil_check_select = document.querySelectorAll('.fil_check_select');
+
+        let data = '';
+        const data_id = [];
+        let index = 0;
+
+        fil_check_select.forEach(element => {
+            if (element.checked === true) {
+                data_id.push(element.getAttribute('data-id'));
+
+                if (index === 0) {
+                    data = element.getAttribute('data-id');
+
+                } else {
+                    data += ',' + element.getAttribute('data-id');
+                }
+                index++;
+            }
+        });
+
+        if (index === 1) {//Borrar un solo ID
+            let data_result = await Make_Consult('delete?id=' + parseInt(data), 'delete');
+
+            if (data_result['success'] === true) {
+                Delete_Fil_Container(data);
+                Show_Message('Dato Eliminado');
+            }
+
+        } else if (index > 1) {//Borrar Varios ID
+            let data_result = await Make_Consult("delete?option=many&ids=" + data, 'delete');
+
+            if (data_result['success'] === true) {
+                data_id.forEach(element => {
+                    Delete_Fil_Container(element);
+                });
+                Show_Message('Datos Eliminados');
+            }
+        }
+    }
+
     //Funciones de Ayuda
     //--------------------------------------------------------------------------------------------------
-    function change_theme() {
+    function Delete_Fil_Container(id) {
+        document.querySelector(`#fil_container-${id}`).remove();
+    }
+
+    function Change_Theme() {
         let body = document.querySelector('body');
         let icon = document.querySelector('#btn_theme > i');
 
         if (body.getAttribute('data-bs-theme') === 'light') {
             body.setAttribute('data-bs-theme', 'dark');
             icon.setAttribute('class', 'fa-xl fa-solid fa-sun');
-            
+
         } else {
             body.setAttribute('data-bs-theme', 'light');
             icon.setAttribute('class', 'fa-xl fa-solid fa-moon');
@@ -81,7 +128,9 @@ window.addEventListener('load', () => {
     function Insert_Table(template, body_element, element, convert_deadline = true) {
         //Referencias al Template
         const clone_template = template.content.cloneNode(true);
+        let fil_container = clone_template.querySelector('#fil_container');
         let fil_id = clone_template.querySelector('#fil_id');
+        let fil_check_select = clone_template.querySelector('#fil_check_select');
         let fil_name = clone_template.querySelector('#fil_name');
         let fil_deadline = clone_template.querySelector('#fil_deadline');
         let fil_complete = clone_template.querySelector('#fil_complete .form-check-input');
@@ -90,15 +139,22 @@ window.addEventListener('load', () => {
         fil_id.textContent = element['id'];
         fil_name.textContent = element['name'];
 
+        //Verificar si la fecha esta en el formato correcto
         if (convert_deadline === true) {
             fil_deadline.textContent = Convert_Deadline(element['deadline']);
         } else {
             fil_deadline.textContent = element['deadline'];
         }
 
+        //Verificar estado de la tarea
         if (element['complete'] === 'si') {
             fil_complete.checked = true;
         }
+
+        //Establecer campos de ID para otras tareas posteriores
+        fil_container.setAttribute('id', `fil_container-${element['id']}`);
+        fil_check_select.setAttribute('data-id', element['id']);
+        fil_complete.setAttribute('data-id', element['id']);
 
         //Agregar en el Tbody
         body_element.appendChild(clone_template);
