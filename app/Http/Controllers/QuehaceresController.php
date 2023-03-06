@@ -51,11 +51,9 @@ class QuehaceresController extends Controller {
     public function update(Request $request) {
         //Validaciones
         $this->validate_id($request);
-        $request->validate([
-            'name'     => 'sometimes|regex:/^[\w\d ]+$/|min:4|max:150',
-            'deadline' => 'sometimes|date_format:d-m-Y',
-            'complete' => 'sometimes|in:si,no'
-        ]);
+        $this->validate_name($request, 'sometimes');
+        $this->validate_deadline($request, 'sometimes');
+        $this->validate_complete($request);
 
         $data = [
             'name'     => $request->name ?? null,
@@ -94,14 +92,14 @@ class QuehaceresController extends Controller {
         $this->validate_id($request);
 
         DB::delete('DELETE from quehaceres
-        where id = ? limit 1', [$request->id]);
+                    where id = ? limit 1', [$request->id]);
 
         return $this->response_api(true);
     }
 
     //Funciones Adicionales
     //--------------------------------------------------------------------------------------------------
-    private function response_api(bool $status, array|null $data = null, int $code = 200) {
+    private function response_api(bool $status, array | null $data = null, int $code = 200) {
         return response()->json([
             'success'    => $status,
             'quehaceres' => $data,
@@ -129,15 +127,21 @@ class QuehaceresController extends Controller {
         ]);
     }
 
-    private function validate_name(Request $request): void {
+    private function validate_name(Request $request, string $require = 'required'): void {
         $request->validate([
-            'name' => 'required|regex:/^[\w\d ]+$/|min:4|max:150'
+            'name' => "$require|regex:/^[\w\d ]+$/|min:4|max:60"
         ]);
     }
 
-    private function validate_deadline(Request $request): void {
+    private function validate_deadline(Request $request, string $require = 'required'): void {
         $request->validate([
-            'deadline' => 'required|date_format:d-m-Y'
+            'deadline' => "$require|date_format:d-m-Y"
+        ]);
+    }
+
+    private function validate_complete(Request $request): void {
+        $request->validate([
+            'complete' => 'sometimes|in:si,no'
         ]);
     }
 }
