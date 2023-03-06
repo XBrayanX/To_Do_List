@@ -1,9 +1,37 @@
 window.addEventListener('load', () => {
     //Valores Globales
-    let fil_tbody = document.querySelector('#fil_tbody');
     let template = document.querySelector('#fil_template');
+    let fil_tbody = document.querySelector('#fil_tbody');
+    let btn_insert = document.querySelector('#btn_insert');
+
+    btn_insert.addEventListener('click', Store);
 
     Fill_Table();
+
+    async function Store() {
+        let name = document.querySelector('#name');
+        let deadline = document.querySelector('#deadline');
+
+        //Convertir a fecha valida en el servidor #/#/####
+        deadline = deadline.value.split('-').reverse().join('-');
+
+        let data = new FormData();
+        data.append('name', name.value);
+        data.append('deadline', deadline);
+
+        let data_result = await Make_Consult('store', 'post', data);
+
+        //Agregar el nuevo dato a la tabla
+        if (data_result['success'] === true) {
+            data_array = {
+                'name': name.value,
+                'deadline': deadline.replaceAll('-','/')
+            };
+            Insert_Table(template, fil_tbody, data_array, false);
+
+            Show_Message('Agregado');
+        }
+    }
 
     async function Fill_Table() {
         //Traer datos de la Base
@@ -11,26 +39,48 @@ window.addEventListener('load', () => {
 
         //Llenar Datos
         data.quehaceres.forEach(element => {
-            //Referencias al Template
-            const clone_template = template.content.cloneNode(true);
-            let fil_id = clone_template.querySelector('#fil_id');
-            let fil_name = clone_template.querySelector('#fil_name');
-            let fil_deadline = clone_template.querySelector('#fil_deadline');
-            let fil_complete = clone_template.querySelector('#fil_complete .form-check-input');
-
-            //Llenar Campos
-            fil_id.textContent = element['id'];
-            fil_name.textContent = element['name'];
-            fil_deadline.textContent = element['deadline'];
-            
-            if(element['complete'] === 'si'){
-                fil_complete.checked = true;
-                console.log(fil_complete);
-            }
-
-            //Agregar en el Tbody
-            fil_tbody.appendChild(clone_template);
+            Insert_Table(template, fil_tbody, element);
         });
+    }
+
+    function Convert_Deadline(string) {
+        return string.split('-').reverse().join('/');
+    }
+
+    function Show_Message(text){
+        let content = document.querySelector('.content');
+        let alert_template = document.querySelector('#alert_template');
+        let clone_template = alert_template.content.cloneNode(true);
+        let alert_text = clone_template.querySelector('#alert_text');
+
+        alert_text.textContent = text;
+        content.appendChild(clone_template);
+    }
+
+    function Insert_Table(template, body_element, element, convert_deadline = true) {
+        //Referencias al Template
+        const clone_template = template.content.cloneNode(true);
+        let fil_id = clone_template.querySelector('#fil_id');
+        let fil_name = clone_template.querySelector('#fil_name');
+        let fil_deadline = clone_template.querySelector('#fil_deadline');
+        let fil_complete = clone_template.querySelector('#fil_complete .form-check-input');
+
+        //Llenar Campos
+        fil_id.textContent = element['id'];
+        fil_name.textContent = element['name'];
+
+        if (convert_deadline === true) {
+            fil_deadline.textContent = Convert_Deadline(element['deadline']);
+        } else {
+            fil_deadline.textContent = element['deadline'];
+        }
+
+        if (element['complete'] === 'si') {
+            fil_complete.checked = true;
+        }
+
+        //Agregar en el Tbody
+        body_element.appendChild(clone_template);
     }
 
     async function Make_Consult(url, method, data = null) {
