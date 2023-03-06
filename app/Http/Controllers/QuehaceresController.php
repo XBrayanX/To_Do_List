@@ -1,8 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\Validate_Quehaceres;
-use App\Models\Quehaceres;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -88,11 +86,24 @@ class QuehaceresController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request) {
-        //Validación
-        $this->validate_id($request);
+        $query = '';
 
-        DB::delete('DELETE from quehaceres
-                    where id = ? limit 1', [$request->id]);
+        if (strtolower($request->option) === 'many') {
+            //Validación
+            $this->validate_many_id($request);
+            $query = "where id in($request->ids)";
+
+        } elseif (strtolower($request->option) === 'all') {
+            $query = '';
+
+        } else {
+            //Validación
+            $this->validate_id($request);
+            $query = "where id = $request->id limit 1";
+        }
+
+        //Ejecutar consulta
+        DB::delete("DELETE from quehaceres $query");
 
         return $this->response_api(true);
     }
@@ -136,6 +147,12 @@ class QuehaceresController extends Controller {
     private function validate_deadline(Request $request, string $require = 'required'): void {
         $request->validate([
             'deadline' => "$require|date_format:d-m-Y"
+        ]);
+    }
+
+    private function validate_many_id(Request $request) {
+        $request->validate([
+            'ids' => 'required|regex:/^(\d+,{1})+(\d)+$/'
         ]);
     }
 
