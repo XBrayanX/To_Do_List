@@ -5,11 +5,13 @@ window.addEventListener('load', () => {
     let btn_insert = document.querySelector('#btn_insert');
     let btn_theme = document.querySelector('#btn_theme');
     let btn_delete = document.querySelector('#btn_delete');
+    let btn_select_all = document.querySelector('#btn_select_all');
 
     //Eventos de Escucha
     btn_insert.addEventListener('click', Store);
     btn_theme.addEventListener('click', Change_Theme);
     btn_delete.addEventListener('click', Delete_Items);
+    btn_select_all.addEventListener('click', Delete_All);
 
     Fill_Table();
 
@@ -91,6 +93,41 @@ window.addEventListener('load', () => {
         }
     }
 
+    async function Delete_All() {
+        let response_user = false;
+        await Swal.fire({
+            title: 'Estas Seguro?',
+            text: "Esta acción no se puede revertir",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                response_user = true;
+            }
+        });
+
+        if (response_user === true) {
+            let data_result = await Make_Consult('delete?option=all', 'delete');
+
+            if (data_result['success'] === true) {
+                let fil_check_select = document.querySelectorAll('.fil_check_select');
+
+                fil_check_select.forEach(element => {
+                    Delete_Fil_Container(element.getAttribute('data-id'));
+                });
+
+                Swal.fire(
+                    'Datos Eliminado!',
+                    'Todos los Datos han sido eliminados',
+                    'success'
+                );
+            }
+        }
+    }
+
     //Funciones de Ayuda
     //--------------------------------------------------------------------------------------------------
     function Delete_Fil_Container(id) {
@@ -123,15 +160,15 @@ window.addEventListener('load', () => {
             timer: 1000,
             timerProgressBar: true,
             didOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
             }
-          })
-          
-          Toast.fire({
+        });
+
+        Toast.fire({
             icon: icon,
             title: text
-          })
+        });
     }
 
     function Insert_Table(template, body_element, element, convert_deadline = true) {
