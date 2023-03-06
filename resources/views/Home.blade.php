@@ -24,6 +24,13 @@
         </header>
 
         <section class="content mt-3">
+            <template id="alert_template">
+                <div class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0" role="alert">
+                    <strong id="alert_text"></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </template>
+
             <h2 class="h2 border-4 border-bottom mb-2">Lista de Quehaceres</h2>
 
             <form class="w-50">
