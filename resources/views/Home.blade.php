@@ -13,17 +13,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
     {{-- Fon Awesome --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body>
-    <div class="container-xxl">
-        <header>
-            <nav class="navbar navbar-expand-lg p-1">
-                <a class="navbar-brand" href="">Brayan Aguilar</a>
-            </nav>
-        </header>
+<body data-bs-theme="light">
+    <header class="container-xxl">
+        <nav class="row navbar navbar-expand-lg p-1 bg-body-tertiary">
+            <div class="col">
+                <a class="navbar-brand fw-bold" href="" target="_blank">Brayan Aguilar</a>
+            </div>
 
-        <section class="content mt-3">
+            <div class="col d-flex justify-content-end align-items-center">
+                <a class="btn rounded-fill">
+                    <i class="fa-xl fa-solid fa-sun"></i>
+                </a>
+                <a class="ms-2 nav-link" href="" target="_blank">
+                    <i class="fa-xl fa-brands fa-github"></i>
+                </a>
+                <a class="ms-3 nav-link fw-bold" href="" target="_blank">Api</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-xxl mt-4">
+        <section class="content">
             <template id="alert_template">
                 <div class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0" role="alert">
                     <strong id="alert_text"></strong>
@@ -33,13 +45,18 @@
 
             <h2 class="h2 border-4 border-bottom mb-2">Lista de Quehaceres</h2>
 
-            <form class="w-50">
+            <form>
                 <div class="input-group mb-3">
-                    <input type="text" id="name" class="form-control" placeholder="Nueva Tarea" maxlength=60>
-                    <span class="input-group-text">Fecha limite</span>
-                    <input type="date" id="deadline" class="form-control">
+                    <div id="container_name">
+                        <input type="text" id="name" class="form-control" placeholder="Nueva Tarea" maxlength=60>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <span class="input-group-text">Fecha limite</span>
+                        <input type="date" id="deadline" class="form-control">
+                    </div>
 
-                    <div class="col-auto ms-2">
+                    <div class="ms-2">
                         <button id="btn_insert" type="button" class="btn btn-success">+</button>
                     </div>
                 </div>
@@ -76,7 +93,7 @@
                 </tbody>
             </table>
 
-            <div class="options">
+            <div class="options position-fixed bottom-0 end-0 m-2 invisible">
                 <button type="button" class="btn btn-primary" id="btn_select_all">Marcar Todos</button>
                 <button type="button" class="btn btn-danger" id="btn_delete">
                     <i class="fa fa-trash"></i>
