@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Quehaceres;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,10 @@ class QuehaceresController extends Controller {
         DB::insert('INSERT into quehaceres(name, deadline)
         values(?, ?)', [$request->name, $deadline]);
 
-        return $this->response_api(true);
+        $last_id = DB::select('SELECT id from quehaceres
+        order by id desc limit 1');
+
+        return $this->response_api(true, ['last_id' => $last_id]);
     }
 
     /**
