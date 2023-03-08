@@ -144,7 +144,7 @@ class QuehaceresController extends Controller {
 
     private function validate_name(Request $request, string $require = 'required'): void {
         $request->validate([
-            'name' => "$require|regex:/^[\w\d ]+$/|min:4|max:60"
+            'name' => "$require|regex:/^[#\-+\w ]+$/|min:4|max:60"
         ]);
     }
 
