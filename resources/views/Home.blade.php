@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{asset('Css/Home.min.css')}}">
 
     {{-- Javascript --}}
-    <script src="{{asset('js/Home.js')}}"></script>
+    <script src="{{asset('Js/Home.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {{-- Bootstrap --}}
@@ -35,7 +35,7 @@
                 <a class="ms-4 nav-link" href="https://github.com/XBrayanX/Lista_Quehaceres" target="_blank">
                     <i class="fa-xl fa-brands fa-github"></i>
                 </a>
-                <a class="ms-3 nav-link fw-bold fs-5" href="" target="_blank">Api</a>
+                <a class="ms-3 nav-link fw-bold fs-5" href="https://documenter.getpostman.com/view/13071820/2s93JqRjZq" target="_blank">Api</a>
             </div>
         </nav>
     </header>
