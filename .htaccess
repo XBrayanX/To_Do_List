@@ -1,0 +1,30 @@
+#Evitar el Acceso a los siguientes tipos de archivos (NO QUITAR ESTA REGLA)
+<FilesMatch "\.(htaccess|lock|gitignore|json|lock)$">
+order allow,deny
+deny from all
+</FilesMatch>
+
+#+FollowSymLinks: Hace que Apache siga los enlaces simbólicos del sistema (atajos) 
+#en su sistema de archivos. 
+Options +FollowSymLinks
+
+#Deshabilitar Negociacion de Contenido
+#No Mapear ruta falsa si no se encuentra el archivo requerido, no es optimo mapearla
+Options -Multiviews
+
+#Ocultar la Indexacion de Todos los Directorios
+Options All -Indexes
+
+
+# Redirigimos al Index si el modulo esta presente
+<IfModule mod_rewrite.c>
+#Permitir Redireccion
+RewriteEngine On
+
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Ocultar Extencion de Codigo PHP
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php
+</IfModule>
