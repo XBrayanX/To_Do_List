@@ -142,6 +142,14 @@ window.addEventListener('load', () => {
         }
     }
 
+    async function Update(input) {
+        let complete = 'no';
+        input.checked === true ? complete = 'si' : complete = 'no';
+
+        let data_send = '?id=' + input.getAttribute('data-id') + '&complete=' + complete;
+        let data_result = await Make_Consult('update' + data_send, 'put');
+    }
+
     //Funciones de Ayuda
     //--------------------------------------------------------------------------------------------------
     function Validate_Input(input) {
@@ -201,6 +209,7 @@ window.addEventListener('load', () => {
         let fil_container = clone_template.querySelector('#fil_container');
         let fil_id = clone_template.querySelector('#fil_id');
         let fil_check_select = clone_template.querySelector('#fil_check_select');
+        let fil_check_switch = clone_template.querySelector('#fil_check_switch');
         let fil_name = clone_template.querySelector('#fil_name');
         let fil_deadline = clone_template.querySelector('#fil_deadline');
         let fil_complete = clone_template.querySelector('#fil_complete .form-check-input');
@@ -224,10 +233,14 @@ window.addEventListener('load', () => {
         //Establecer campos de ID para otras tareas posteriores
         fil_container.setAttribute('id', `fil_container-${element['id']}`);
         fil_check_select.setAttribute('data-id', element['id']);
+        fil_check_switch.setAttribute('data-id', element['id']);
         fil_complete.setAttribute('data-id', element['id']);
 
         //Agregar en el Tbody
         body_element.appendChild(clone_template);
+
+        //Poner a la escucha el Botón de Actualizar tarea
+        fil_check_switch.addEventListener('change', () => Update(fil_check_switch));
     }
 
     async function Make_Consult(url, method, data = null) {
