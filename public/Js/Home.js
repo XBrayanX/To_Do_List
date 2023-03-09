@@ -8,18 +8,31 @@ window.addEventListener('load', () => {
     let btn_select_all = document.querySelector('#btn_select_all');
 
     //Eventos de Escucha
-    btn_insert.addEventListener('click', Store);
+    btn_insert.addEventListener('click', function (event) {
+        event.preventDefault();
+        Store();
+    });
     btn_theme.addEventListener('click', Change_Theme);
     btn_delete.addEventListener('click', Delete_Items);
     btn_select_all.addEventListener('click', Delete_All);
 
     Fill_Table();//Método inicial para llenar datos
 
+    //Validación y eventos en los campos del formulario
+    let name = document.querySelector('#name');
+    let deadline = document.querySelector('#deadline');
+    name.addEventListener('keyup', () => { Validate_Input(name); });
+    deadline.addEventListener('keyup', () => { Validate_Input(deadline); });
+
     //Funciones para Generar Consultas
     //--------------------------------------------------------------------------------------------------
     async function Store() {
         let name = document.querySelector('#name');
         let deadline = document.querySelector('#deadline');
+
+        if (name.checkValidity() !== true || deadline.checkValidity() !== true) {
+            return false;
+        }
 
         //Convertir a fecha valida en el servidor #/#/####
         deadline = deadline.value.split('-').reverse().join('-');
@@ -33,7 +46,7 @@ window.addEventListener('load', () => {
         // //Agregar el nuevo dato a la tabla
         if (data_result['code'] === 201) {
             data_array = {
-                'id' : data_result.data[0]['id'],
+                'id': data_result.data[0]['id'],
                 'name': name.value,
                 'deadline': deadline.replaceAll('-', '/')
             };
@@ -131,6 +144,16 @@ window.addEventListener('load', () => {
 
     //Funciones de Ayuda
     //--------------------------------------------------------------------------------------------------
+    function Validate_Input(input) {
+        if (input.checkValidity() !== true) {
+            input.classList.add('is-invalid');
+
+        } else {
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+        }
+    }
+
     function Delete_Fil_Container(id) {
         document.querySelector(`#fil_container-${id}`).remove();
     }
