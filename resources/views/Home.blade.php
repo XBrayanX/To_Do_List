@@ -92,7 +92,7 @@
                             <td id="fil_deadline"></td>
                             <td id="fil_complete">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch">
+                                    <input id="fil_check_switch" class="form-check-input" type="checkbox" role="switch">
                                 </div>
                             </td>
                         </tr>
