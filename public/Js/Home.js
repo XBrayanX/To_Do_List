@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
     btn_delete.addEventListener('click', Delete_Items);
     btn_select_all.addEventListener('click', Delete_All);
 
-    Fill_Table();
+    Fill_Table();//Método inicial para llenar datos
 
     //Funciones para Generar Consultas
     //--------------------------------------------------------------------------------------------------
@@ -31,9 +31,9 @@ window.addEventListener('load', () => {
         let data_result = await Make_Consult('store', 'post', data);
 
         // //Agregar el nuevo dato a la tabla
-        if (data_result['success'] === true) {
+        if (data_result['code'] === 201) {
             data_array = {
-                'id' : data_result['quehaceres'][0]['id'],
+                'id' : data_result.data[0]['id'],
                 'name': name.value,
                 'deadline': deadline.replaceAll('-', '/')
             };
@@ -45,10 +45,10 @@ window.addEventListener('load', () => {
 
     async function Fill_Table() {
         //Traer datos de la Base
-        let data = await Make_Consult('index', 'get');
+        let data_result = await Make_Consult('index', 'get');
 
         //Llenar Datos
-        data.quehaceres.forEach(element => {
+        data_result.data.forEach(element => {
             Insert_Table(template, fil_tbody, element);
         });
     }
@@ -56,37 +56,37 @@ window.addEventListener('load', () => {
     async function Delete_Items() {
         let fil_check_select = document.querySelectorAll('.fil_check_select');
 
-        let data = '';
-        const data_id = [];
-        let index = 0;
+        let data_send = '';
+        const data_ids = [];//Solo se usaran para hacer referencia al DOM para borrar
 
+        //Sacar el id de los elementos seleccionados
         fil_check_select.forEach(element => {
             if (element.checked === true) {
-                data_id.push(element.getAttribute('data-id'));
+                data_ids.push(element.getAttribute('data-id'));
 
-                if (index === 0) {
-                    data = element.getAttribute('data-id');
+                if (data_send.length === 0) {
+                    data_send = element.getAttribute('data-id');
 
                 } else {
-                    data += ',' + element.getAttribute('data-id');
+                    data_send += ',' + element.getAttribute('data-id');
                 }
-                index++;
+
             }
         });
 
-        if (index === 1) {//Borrar un solo ID
-            let data_result = await Make_Consult('delete?id=' + parseInt(data), 'delete');
+        if (data_send.length === 1) {//Borrar un solo ID
+            let data_result = await Make_Consult('delete?id=' + parseInt(data_send), 'delete');
 
-            if (data_result['success'] === true) {
-                Delete_Fil_Container(data);
+            if (data_result.data['affected'] > 0) {
+                Delete_Fil_Container(data_send);
                 Show_Message_Time('Dato Eliminado');
             }
 
-        } else if (index > 1) {//Borrar Varios ID
-            let data_result = await Make_Consult("delete?option=many&ids=" + data, 'delete');
+        } else if (data_send.length > 1) {//Borrar Varios ID
+            let data_result = await Make_Consult("delete?option=many&ids=" + data_send, 'delete');
 
-            if (data_result['success'] === true) {
-                data_id.forEach(element => {
+            if (data_result.data['affected'] > 0) {
+                data_ids.forEach(element => {
                     Delete_Fil_Container(element);
                 });
                 Show_Message_Time('Datos Eliminados');
@@ -113,7 +113,7 @@ window.addEventListener('load', () => {
         if (response_user === true) {
             let data_result = await Make_Consult('delete?option=all', 'delete');
 
-            if (data_result['success'] === true) {
+            if (data_result.data['affected'] > 0) {
                 let fil_check_select = document.querySelectorAll('.fil_check_select');
 
                 fil_check_select.forEach(element => {
