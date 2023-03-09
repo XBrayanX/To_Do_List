@@ -1,27 +1,35 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Quehaceres;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class QuehaceresController extends Controller {
+    private $validator;
+    private $validator_rules;
     /**
      * Display a listing of the resource.
      */
     public function index() {
         $data = DB::select('SELECT * from quehaceres');
 
-        return $this->response_api(true, $data);
+        return $this->response_api($data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        $this->validate_name($request);
-        $this->validate_deadline($request);
+        //Validaciones
+        $this->validate_name();
+        $this->validate_deadline();
+        $this->validator = Validator::make($request->all(), $this->validator_rules);
+
+        if ($this->validator->fails()) {
+            return $this->response_api(null, 400);
+        }
 
         //cambiar formato de la fecha para poder ser Insertada en Mysql
         $deadline = $this->convert_data($request->deadline);
@@ -32,7 +40,7 @@ class QuehaceresController extends Controller {
         $last_id = DB::select('SELECT id from quehaceres
         order by id desc limit 1');
 
-        return $this->response_api(true, $last_id);
+        return $this->response_api($last_id, 201);
     }
 
     /**
@@ -41,10 +49,14 @@ class QuehaceresController extends Controller {
     public function show(Request $request) {
         //Validaciones
         $this->validate_id($request);
+        $this->validator = Validator::make($request->all(), $this->validator_rules);
+
+        if ($this->validator->fails()) {
+            return $this->response_api(null, 400);
+        }
 
         $data = DB::select('SELECT * from quehaceres where id = ? limit 1', [$request->id]);
-
-        return $this->response_api(true, $data);
+        return $this->response_api($data);
     }
 
     /**
@@ -52,10 +64,15 @@ class QuehaceresController extends Controller {
      */
     public function update(Request $request) {
         //Validaciones
-        $this->validate_id($request);
-        $this->validate_name($request, 'sometimes');
-        $this->validate_deadline($request, 'sometimes');
-        $this->validate_complete($request);
+        $this->validate_id();
+        $this->validate_name('sometimes');
+        $this->validate_deadline('sometimes');
+        $this->validate_complete();
+        $this->validator = Validator::make($request->all(), $this->validator_rules);
+
+        if ($this->validator->fails()) {
+            return $this->response_api(null, 400);
+        }
 
         $data = [
             'name'     => $request->name ?? null,
@@ -76,14 +93,14 @@ class QuehaceresController extends Controller {
             $query = $this->create_query($data);
 
             //Ejecutar Consulta
-            $update = DB::update("UPDATE quehaceres
+            $affected = DB::update("UPDATE quehaceres
             set $query
             where id = ?
             limit 1", [$request->id]);
 
-            return $this->response_api(true);
+            return $this->response_api(['affected' => $affected]);
         }
-        return $this->response_api(false);
+        return $this->response_api(null, 400);
     }
 
     /**
@@ -106,19 +123,39 @@ class QuehaceresController extends Controller {
             $query = "where id = $request->id limit 1";
         }
 
-        //Ejecutar consulta
-        DB::delete("DELETE from quehaceres $query");
+        if (!empty($this->validator_rules)) {
+            $this->validator = Validator::make($request->all(), $this->validator_rules);
 
-        return $this->response_api(true);
+            if ($this->validator->fails()) {
+                return $this->response_api(null, 400);
+            }
+        }
+
+        //Ejecutar consulta
+        $affected = DB::delete("DELETE from quehaceres $query");
+
+        return $this->response_api(['affected' => $affected]);
     }
 
     //Funciones Adicionales
     //--------------------------------------------------------------------------------------------------
-    private function response_api(bool $status, array | null $data = null, int $code = 200) {
-        return response()->json([
-            'success'    => $status,
-            'quehaceres' => $data,
-        ], $code);
+    private function response_api($data = null, int $code = 200) {
+        $errors = null;
+
+        if (!empty($this->validator) && $this->validator->fails()) {
+            $errors = $this->validator->messages();
+        }
+
+        $response = [
+            'code'   => $code,
+            'data'   => $data,
+            'errors' => $errors,
+        ]; 
+
+        //Quitar Valores vacíos
+        $response = array_filter($response);
+
+        return response()->json($response, $code);
     }
 
     private function convert_data($date) {
@@ -133,36 +170,25 @@ class QuehaceresController extends Controller {
         return $string;
     }
 
-
     //Funciones de Validación
     //--------------------------------------------------------------------------------------------------
-    private function validate_id(Request $request): void {
-        $request->validate([
-            'id' => 'required|numeric'
-        ]);
+    private function validate_id(): void {
+        $this->validator_rules['id'] = 'required|numeric';
     }
 
-    private function validate_name(Request $request, string $require = 'required'): void {
-        $request->validate([
-            'name' => "$require|regex:/^[#\-+\w ]+$/|min:4|max:60"
-        ]);
+    private function validate_name(string $require = 'required'): void {
+        $this->validator_rules['name'] = "$require|regex:/^[#\-+\w ]+$/|min:4|max:60";
     }
 
-    private function validate_deadline(Request $request, string $require = 'required'): void {
-        $request->validate([
-            'deadline' => "$require|date_format:d-m-Y"
-        ]);
+    private function validate_deadline(string $require = 'required'): void {
+        $this->validator_rules['deadline'] = "$require|date_format:d-m-Y";
     }
 
-    private function validate_many_id(Request $request) {
-        $request->validate([
-            'ids' => 'required|regex:/^(\d+,{1})+(\d)+$/'
-        ]);
+    private function validate_many_id(): void {
+        $this->validator_rules['ids'] = 'required|regex:/^(\d+,{1})+(\d)+$/';
     }
 
-    private function validate_complete(Request $request): void {
-        $request->validate([
-            'complete' => 'sometimes|in:si,no'
-        ]);
+    private function validate_complete(): void {
+        $this->validator_rules['complete'] = 'sometimes|in:si,no';
     }
 }
