@@ -31,6 +31,7 @@ window.addEventListener('load', () => {
         let deadline = document.querySelector('#deadline');
 
         if (name.checkValidity() !== true || deadline.checkValidity() !== true) {
+            Show_Message_Time('Por favor llene los datos correctamente', 'info', 2000);
             return false;
         }
 
@@ -87,7 +88,8 @@ window.addEventListener('load', () => {
             }
         });
 
-        if (data_send.length === 1) {//Borrar un solo ID
+        console.log(data_ids.length);
+        if (data_ids.length === 1) {//Borrar un solo ID
             let data_result = await Make_Consult('delete?id=' + parseInt(data_send), 'delete');
 
             if (data_result.data['affected'] > 0) {
@@ -95,7 +97,7 @@ window.addEventListener('load', () => {
                 Show_Message_Time('Dato Eliminado');
             }
 
-        } else if (data_send.length > 1) {//Borrar Varios ID
+        } else if (data_ids.length > 1) {//Borrar Varios ID
             let data_result = await Make_Consult("delete?option=many&ids=" + data_send, 'delete');
 
             if (data_result.data['affected'] > 0) {
@@ -104,6 +106,8 @@ window.addEventListener('load', () => {
                 });
                 Show_Message_Time('Datos Eliminados');
             }
+        } else {
+            Show_Message_Time('Seleccione al menos 1 registro', 'info');
         }
     }
 
@@ -184,12 +188,12 @@ window.addEventListener('load', () => {
         return string.split('-').reverse().join('/');
     }
 
-    function Show_Message_Time(text, icon = 'success') {
+    function Show_Message_Time(text, icon = 'success', timer = 1000) {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 1000,
+            timer: timer,
             timerProgressBar: true,
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer);
