@@ -62,14 +62,14 @@
                     </div>
 
                     <div class="ms-2">
-                        <button id="btn_insert" type="submit" class="btn btn-success">
+                        <button id="btn_insert" type="submit" class="btn btn-success" aria-label="add_item">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
                 </div>
             </form>
 
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Seleccionar</th>
@@ -102,7 +102,7 @@
 
             <div class="options position-fixed bottom-0 end-0 m-2">
                 <button type="button" class="btn btn-danger fw-bold" id="btn_select_all">Eliminar Todos</button>
-                <button type="button" class="btn btn-danger fw-bold" id="btn_delete">
+                <button type="button" class="btn btn-danger fw-bold" id="btn_delete" aria-label="delete_item">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
