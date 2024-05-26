@@ -3,7 +3,7 @@ window.addEventListener('load', () => {
     let template = document.querySelector('#fil_template');
     let fil_tbody = document.querySelector('#fil_tbody');
     let btn_insert = document.querySelector('#btn_insert');
-    let btn_theme = document.querySelector('#btn_theme');
+    
     let btn_delete = document.querySelector('#btn_delete');
     let btn_select_all = document.querySelector('#btn_select_all');
 
@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
         event.preventDefault();
         Store();
     });
-    btn_theme.addEventListener('click', Change_Theme);
+    
     btn_delete.addEventListener('click', Delete_Items);
     btn_select_all.addEventListener('click', Delete_All);
 
@@ -168,20 +168,6 @@ window.addEventListener('load', () => {
 
     function Delete_Fil_Container(id) {
         document.querySelector(`#fil_container-${id}`).remove();
-    }
-
-    function Change_Theme() {
-        let body = document.querySelector('body');
-        let icon = document.querySelector('#btn_theme > i');
-
-        if (body.getAttribute('data-bs-theme') === 'light') {
-            body.setAttribute('data-bs-theme', 'dark');
-            icon.setAttribute('class', 'fa-xl fa-solid fa-sun');
-
-        } else {
-            body.setAttribute('data-bs-theme', 'light');
-            icon.setAttribute('class', 'fa-xl fa-solid fa-moon');
-        }
     }
 
     function Convert_Deadline(string) {

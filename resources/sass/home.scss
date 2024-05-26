@@ -20,11 +20,28 @@ $color3: #b66ff8;
     height: 1.2em;
 }
 
+.content h2 {
+    color: $color3;
+}
+
+#btn_insert {
+    background-color: $color1;
+    border-color: $color1;
+    color: white;
+
+    &:hover {
+        background-color: $color3;
+        border-color: $color2;
+    }
+}
+
 .form-check-input:checked {
     background-color: $color2;
     border-color: $color3;
 }
 
-#form_task input{//Evitar el gris en el formulario al pasar a dark
-    color: black;
+#ct-todolist {
+    margin-top: 20px;
+    border-top: 4px dashed $color1;
+    border-radius: 40px;
 }
