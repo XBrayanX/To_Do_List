@@ -18,5 +18,5 @@ Demonstrate knowledge using Laravel + HTML + javascript + Bootstrap + Api
 
 
 ## Notes
-- Documentación de la Api <a href="https://documenter.getpostman.com/view/13071820/2s93JqRjZq" target="_blank">aquí</a>.
-- Puedes ver mi perfil de LinkedIn <a href="https://hn.linkedin.com/in/brayan-a-31a926207" target="_blank">aquí</a>.
+- Api documentation <a href="https://documenter.getpostman.com/view/13071820/2s93JqRjZq" target="_blank">here</a>.
+- You can view my linkedin profile <a href="https://hn.linkedin.com/in/brayan-a-31a926207" target="_blank">here</a>.
