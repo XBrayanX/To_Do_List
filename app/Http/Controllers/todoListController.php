@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class QuehaceresController extends Controller {
+class todoListController extends Controller {
     private $validator;
     private $validator_rules;
     /**
      * Display a listing of the resource.
      */
     public function index() {
-        $data = DB::select('SELECT * from quehaceres');
+        $data = DB::select('SELECT * from todolist');
 
         return $this->response_api($data);
     }
@@ -34,10 +34,10 @@ class QuehaceresController extends Controller {
         //cambiar formato de la fecha para poder ser Insertada en Mysql
         $deadline = $this->convert_data($request->deadline);
 
-        DB::insert('INSERT into quehaceres(name, deadline)
+        DB::insert('INSERT into todolist(name, deadline)
         values(?, ?)', [$request->name, $deadline]);
 
-        $last_id = DB::select('SELECT id from quehaceres
+        $last_id = DB::select('SELECT id from todolist
         order by id desc limit 1');
 
         return $this->response_api($last_id, 201);
@@ -55,7 +55,7 @@ class QuehaceresController extends Controller {
             return $this->response_api(null, 400);
         }
 
-        $data = DB::select('SELECT * from quehaceres where id = ? limit 1', [$request->id]);
+        $data = DB::select('SELECT * from todolist where id = ? limit 1', [$request->id]);
         return $this->response_api($data);
     }
 
@@ -93,7 +93,7 @@ class QuehaceresController extends Controller {
             $query = $this->create_query($data);
 
             //Ejecutar Consulta
-            $affected = DB::update("UPDATE quehaceres
+            $affected = DB::update("UPDATE todolist
             set $query
             where id = ?
             limit 1", [$request->id]);
@@ -132,7 +132,7 @@ class QuehaceresController extends Controller {
         }
 
         //Ejecutar consulta
-        $affected = DB::delete("DELETE from quehaceres $query");
+        $affected = DB::delete("DELETE from todolist $query");
 
         return $this->response_api(['affected' => $affected]);
     }

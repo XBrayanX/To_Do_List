@@ -248,7 +248,7 @@ window.addEventListener('load', () => {
     }
 
     async function Make_Consult(url, method, data = null) {
-        return await fetch(`./api/quehaceres/${url.toLowerCase()}`, {
+        return await fetch(`./api/todolist/${url.toLowerCase()}`, {
             method: method.toUpperCase(),
             body: data
         })

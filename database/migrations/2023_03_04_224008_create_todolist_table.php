@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quehaceres', function (Blueprint $table) {
+        Schema::create('todolist', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
             $table->date('deadline');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quehaceres');
+        Schema::dropIfExists('todolist');
     }
 };
