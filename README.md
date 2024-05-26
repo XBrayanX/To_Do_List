@@ -7,7 +7,7 @@ Demonstrate knowledge using Laravel + HTML + javascript + Bootstrap + Api
 2. Mysql
 
 
-## How to install
+# How to install
 1. Clone this repository: https://github.com/XBrayanX/To_Do_List.git
 2. Copy .env-example to .env `cp .env-example .env`
 3. Enter your MySQL database credentials (DB_USERNAME, DB_PASSWORD) by default ('root', '')
@@ -17,6 +17,6 @@ Demonstrate knowledge using Laravel + HTML + javascript + Bootstrap + Api
 7. Test application 
 
 
-## Notes
+# Notes
 - Api documentation <a href="https://documenter.getpostman.com/view/13071820/2s93JqRjZq" target="_blank">here</a>.
 - You can view my linkedin profile <a href="https://hn.linkedin.com/in/brayan-a-31a926207" target="_blank">here</a>.
