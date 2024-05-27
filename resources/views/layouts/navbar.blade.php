@@ -12,7 +12,7 @@
                 <a id="btn_theme" class="nav-link">
                     <i class="fa-xl fa-solid fa-moon"></i>
                 </a>
-                <a class="ms-4 nav-link" href="https://github.com/XBrayanX/Lista_Quehaceres" target="_blank">
+                <a class="ms-4 nav-link" href="https://github.com/XBrayanX/To_Do_List" target="_blank">
                     <i class="fa-xl fa-brands fa-github"></i>
                 </a>
                 <a class="ms-3 nav-link fw-bold fs-4" href="https://documenter.getpostman.com/view/13071820/2s93JqRjZq" target="_blank">Api</a>
