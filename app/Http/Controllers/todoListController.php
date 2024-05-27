@@ -142,7 +142,8 @@ class todoListController extends Controller {
     }
 
     private function convert_date( $date ) {
-        return Carbon::createFromFormat( 'd-m-Y', $date )->format( 'Y-m-d' );
+        $date = new Carbon( $date );
+        return $date->format( 'Y-m-d' );
     }
 
 
@@ -157,7 +158,7 @@ class todoListController extends Controller {
     }
 
     private function validate_deadline( string $require = 'required' ): void {
-        $this->validator_rules['deadline'] = "$require|date_format:d-m-Y";
+        $this->validator_rules['deadline'] = "$require|date";
     }
 
     private function validate_many_id(): void {
