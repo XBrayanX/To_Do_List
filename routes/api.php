@@ -1,8 +1,5 @@
 <?php
-
-use App\Http\Controllers\QuehaceresController;
-use App\Http\Middleware\Validate_Quehaceres;
-use Illuminate\Http\Request;
+use App\Http\Controllers\todoListController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('quehaceres')->group(function (){
-    Route::get('/index', [QuehaceresController::class, 'index'])->name('quehaceres_index');
-    Route::get('/show', [QuehaceresController::class, 'show'])->name('quehaceres_show');
+Route::prefix( 'todolist' )->group( function () {
+    Route::get( '/index', [todoListController::class, 'index'] )->name( 'todolist_index' );
 
-    Route::post('/store', [QuehaceresController::class, 'store'])->name('quehaceres_store');
+    Route::get( '/show', [todoListController::class, 'show'] )->name( 'todolist_show' );
 
-    Route::put('/update', [QuehaceresController::class, 'update'])->name('quehaceres_update');
+    Route::post( '/store', [todoListController::class, 'store'] )->name( 'todolist_store' );
 
-    Route::delete('/delete', [QuehaceresController::class, 'destroy'])->name('quehaceres_delete');
-});
+    Route::put( '/update', [todoListController::class, 'update'] )->name( 'todolist_update' );
+
+    Route::delete( '/delete', [todoListController::class, 'destroy'] )->name( 'todolist_delete' );
+} );

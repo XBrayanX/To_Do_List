@@ -1,0 +1,69 @@
+//Colores App
+$color1: #741ec5;
+$color2: #8b39d8;
+$color3: #b66ff8;
+
+#btn_theme {
+    cursor: pointer;
+}
+
+#container_name {
+    width: 400px;
+}
+
+.navbar > .col > a:hover {
+    color: $color1;
+}
+
+.fil_check_select {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.content h2 {
+    color: $color3;
+}
+
+#btn_insert {
+    background-color: $color1;
+    border-color: $color1;
+    color: white;
+
+    &:hover {
+        background-color: $color3;
+        border-color: $color2;
+    }
+}
+
+.form-check-input:checked {
+    background-color: $color2;
+    border-color: $color3;
+}
+
+#ct-todolist {
+    margin-top: 20px;
+    border-top: 4px dashed $color1;
+    border-radius: 40px;
+}
+
+#fil_name input {
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 4px;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 2px solid transparent;
+}
+
+#fil_deadline input {
+    background-color: transparent;
+    width: fit-content;
+    border: none;
+}
+
+.input-write {
+    border: 2px dashed $color3 !important;
+    text-overflow: ellipsis;
+}

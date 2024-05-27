@@ -5,6 +5,7 @@ Demonstrate knowledge using Laravel + HTML + javascript + Bootstrap + Api
 # Requirements
 1. php >= 8.1
 2. Mysql
+3. npm 
 
 
 # How to install
@@ -12,9 +13,11 @@ Demonstrate knowledge using Laravel + HTML + javascript + Bootstrap + Api
 2. Copy .env-example to .env `cp .env-example .env`
 3. Enter your MySQL database credentials (DB_USERNAME, DB_PASSWORD) by default ('root', '')
 4. Install dependencies `composer install --prefer-dist --no-dev -o`
-5. Generate Key laravel project `php artisan key:generate`
-6. Create Database and tables `php artisan migrate`
-7. Test application 
+5. Install dependencies npm `npm install ci`
+6. Generate Key laravel project `php artisan key:generate`
+7. Create database and tables `php artisan migrate`
+8. Run application resources `npm run build`
+9. Test application 
 
 
 # Notes
