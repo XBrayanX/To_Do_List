@@ -26,7 +26,6 @@
 </head>
 
 <body data-bs-theme="light">
-
     @include('layouts.navbar')
 
     <div class="container-fluid" id="ct-todolist">
@@ -51,8 +50,37 @@
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
+
+                    <div class="ms-2">
+                        <button type="button" class="btn btn-secondary fw-bold" data-bs-toggle="modal" data-bs-target="#modal_help">
+                            ?
+                        </button>
+                    </div>
                 </div>
             </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal_help" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold text-center w-100 fs-2">Help information</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h3>User Manual:</h3>
+                            <p>To accept any changes within the task table: please press <strong>Enter</strong>. If you exit the element, the program will consider the operation
+                                canceled and revert to its initial value.</p>
+                            <p>All input fields have validations. Make sure they are in green before saving. If they are not, you won't be able to save the changes.</p>
+                            <p class="text-info">Note: Fields in green indicate they have passed validations. Fields in red indicate <span class="text-danger">errors</span> that need to be corrected before saving.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <table class="table table-striped">
                 <thead>
@@ -74,7 +102,7 @@
                             </td>
                             <td id="fil_name">
                                 <input type="text" class="name form-control" name="name" minlength="4" maxlength="60" required pattern="[#\-+\w ]+"
-                               title="Solo se permiten letras, números y los símbolos [- + _ #]">
+                                       title="Solo se permiten letras, números y los símbolos [- + _ #]">
                             </td>
                             <td id="fil_deadline">
                                 <input type="date" class="deadline form-control" name="deadline">
