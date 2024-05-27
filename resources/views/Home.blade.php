@@ -36,14 +36,14 @@
             <form id="form_task">
                 <div class="input-group mb-3">
                     <div id="container_name">
-                        <input type="text" id="name" class="form-control" placeholder="New task"
+                        <input type="text" id="name" name="name" class="form-control" placeholder="New task"
                                minlength="4" maxlength="60" required pattern="[#\-+\w ]+"
                                title="Solo se permiten letras, números y los símbolos [- + _ #]">
                     </div>
 
                     <div class="d-flex ms-1">
                         <span class="input-group-text user-select-none">Deadline</span>
-                        <input type="date" id="deadline" class="form-control" required>
+                        <input type="date" id="deadline" name="deadline" class="form-control" required>
                     </div>
 
                     <div class="ms-2">
@@ -67,14 +67,18 @@
                     <template id="fil_template">
                         <tr id="fil_container">
                             <td id="fil_id" value="" readonly disabled hidden></td>
-                            {{-- <input  type="text"  > --}}
                             <td>
                                 <div class="form-check">
                                     <input id="fil_check_select" class="form-check-input fil_check_select" type="checkbox">
                                 </div>
                             </td>
-                            <td id="fil_name"></td>
-                            <td id="fil_deadline"></td>
+                            <td id="fil_name">
+                                <input type="text" class="name form-control" name="name" minlength="4" maxlength="60" required pattern="[#\-+\w ]+"
+                               title="Solo se permiten letras, números y los símbolos [- + _ #]">
+                            </td>
+                            <td id="fil_deadline">
+                                <input type="date" class="deadline form-control" name="deadline">
+                            </td>
                             <td id="fil_complete">
                                 <div class="form-check form-switch">
                                     <input id="fil_check_switch" class="form-check-input" type="checkbox" role="switch">

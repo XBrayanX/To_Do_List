@@ -1,67 +1,54 @@
 window.addEventListener('load', () => {
-    //Valores Globales
+    //Global Variables
     let template = document.querySelector('#fil_template');
     let fil_tbody = document.querySelector('#fil_tbody');
-    let btn_insert = document.querySelector('#btn_insert');
-    
-    let btn_delete = document.querySelector('#btn_delete');
-    let btn_select_all = document.querySelector('#btn_select_all');
 
-    //Eventos de Escucha
+    Fill_Table();//Initial method for filling data
+
+    //Events
+    let btn_insert = document.querySelector('#btn_insert');
     btn_insert.addEventListener('click', function (event) {
         event.preventDefault();
         Store();
     });
-    
-    btn_delete.addEventListener('click', Delete_Items);
-    btn_select_all.addEventListener('click', Delete_All);
 
-    Fill_Table();//Método inicial para llenar datos
+    document.querySelector('#btn_delete').addEventListener('click', Delete_Items);
+    document.querySelector('#btn_select_all').addEventListener('click', Delete_All);
 
-    //Validación y eventos en los campos del formulario
-    let name = document.querySelector('#name');
-    let deadline = document.querySelector('#deadline');
-    name.addEventListener('keyup', () => { Validate_Input(name); });
-    deadline.addEventListener('keyup', () => { Validate_Input(deadline); });
+    //Validation and events in form fields
+    document.querySelector('#name').addEventListener('keyup', (e) => { Validate_Input(e.target); });
+    document.querySelector('#deadline').addEventListener('keyup', (e) => { Validate_Input(e.target); });
 
-    //Funciones para Generar Consultas
+    //Functions to Generate Queries
     //--------------------------------------------------------------------------------------------------
     async function Store() {
-        let name = document.querySelector('#name');
-        let deadline = document.querySelector('#deadline');
+        let form_task = document.querySelector('#form_task');
 
-        if (name.checkValidity() !== true || deadline.checkValidity() !== true) {
-            Show_Message_Time('Por favor llene los datos correctamente', 'info', 2000);
-            return false;
+        if (form_task.checkValidity() !== true) {
+            return Show_Message_Time('Please fill in the details correctly', 'info', 2000);
         }
 
-        //Convertir a fecha valida en el servidor #/#/####
-        deadline = deadline.value.split('-').reverse().join('-');
-
-        let data = new FormData();
-        data.append('name', name.value);
-        data.append('deadline', deadline);
-
+        let data = new FormData(form_task);
         let data_result = await Make_Consult('store', 'post', data);
 
-        // //Agregar el nuevo dato a la tabla
+        //Add the new data to the table
         if (data_result['code'] === 201) {
-            data_array = {
-                'id': data_result.data[0]['id'],
-                'name': name.value,
-                'deadline': deadline.replaceAll('-', '/')
+            let data_array = {
+                'id': data_result.data.id,
+                'name': data.get('name'),
+                'deadline': data.get('deadline').replaceAll('-', '/')
             };
-            Insert_Table(template, fil_tbody, data_array, false);
 
-            Show_Message_Time('Agregado');
+            Insert_Table(template, fil_tbody, data_array, false);
+            Show_Message_Time('Aggregate');
         }
     }
 
     async function Fill_Table() {
-        //Traer datos de la Base
+        //Bring data from the Base
         let data_result = await Make_Consult('index', 'get');
 
-        //Llenar Datos
+        //Fill Data
         data_result.data.forEach(element => {
             Insert_Table(template, fil_tbody, element);
         });
@@ -71,56 +58,49 @@ window.addEventListener('load', () => {
         let fil_check_select = document.querySelectorAll('.fil_check_select');
 
         let data_send = '';
-        const data_ids = [];//Solo se usaran para hacer referencia al DOM para borrar
+        const data_ids = [];//Only used to reference the DOM for deletion
 
         //Sacar el id de los elementos seleccionados
         fil_check_select.forEach(element => {
             if (element.checked === true) {
                 data_ids.push(element.getAttribute('data-id'));
-
-                if (data_send.length === 0) {
-                    data_send = element.getAttribute('data-id');
-
-                } else {
-                    data_send += ',' + element.getAttribute('data-id');
-                }
-
+                data_send.length === 0 ? data_send = element.getAttribute('data-id') : data_send += ',' + element.getAttribute('data-id');
             }
         });
 
-        console.log(data_ids.length);
-        if (data_ids.length === 1) {//Borrar un solo ID
+        if (data_ids.length === 1) {//Delete a single ID
             let data_result = await Make_Consult('delete?id=' + parseInt(data_send), 'delete');
 
             if (data_result.data['affected'] > 0) {
                 Delete_Fil_Container(data_send);
-                Show_Message_Time('Dato Eliminado');
+                Show_Message_Time('Deleted Data');
             }
 
-        } else if (data_ids.length > 1) {//Borrar Varios ID
+        } else if (data_ids.length > 1) {//Delete Multiple IDs
             let data_result = await Make_Consult("delete?option=many&ids=" + data_send, 'delete');
 
             if (data_result.data['affected'] > 0) {
                 data_ids.forEach(element => {
                     Delete_Fil_Container(element);
                 });
-                Show_Message_Time('Datos Eliminados');
+                Show_Message_Time('Selected data deleted');
             }
+
         } else {
-            Show_Message_Time('Seleccione al menos 1 registro', 'info');
+            Show_Message_Time('Select at least 1 record', 'info');
         }
     }
 
     async function Delete_All() {
         let response_user = false;
         await Swal.fire({
-            title: 'Estas Seguro?',
-            text: "Esta acción no se puede revertir",
+            title: '¿You are sure?',
+            text: "This action cannot be reversed",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Eliminar!'
+            confirmButtonText: 'Yes, Delete!',
         }).then((result) => {
             if (result.isConfirmed) {
                 response_user = true;
@@ -138,20 +118,55 @@ window.addEventListener('load', () => {
                 });
 
                 Swal.fire(
-                    'Datos Eliminado!',
-                    'Todos los Datos han sido eliminados',
+                    'Deleted all Data!',
+                    'All Data has been deleted',
                     'success'
                 );
             }
         }
     }
 
-    async function Update(input) {
+    async function Update_Name(input, event) {
+        if (Validate_Input(input) === true && event.key === 'Enter') {
+            let fil_container = input.parentNode.parentNode;
+            let data_send = '?id=' + fil_container.getAttribute('data-id') + '&name=';
+            let data_result = await Make_Consult('update' + data_send + input.value, 'put');
+
+            if (data_result.data['affected'] > 0) {
+                Change_Status_Input(input);
+            }
+        }
+    }
+
+    function Change_Status_Input(input) {
+        input.classList.remove('is-valid');
+        input.classList.remove('input-write');
+        input.setAttribute('data-prev', input.value);
+        input.blur();
+    }
+
+    async function Lost_Focus(input) {
+        input.value = input.getAttribute('data-prev');
+        input.classList.remove('is-valid');
+        input.classList.remove('input-write');
+        input.blur();
+    }
+    async function Update_Deadline(input, event) {
+        if (Validate_Input(input) === true && event.key === 'Enter') {
+            let fil_container = input.parentNode.parentNode;
+            let data_result = await Make_Consult('update' + '?id=' + fil_container.getAttribute('data-id') + '&deadline=' + input.value, 'put');
+
+            if (data_result.data['affected'] > 0) {
+                Change_Status_Input(input);
+            }
+        }
+    }
+
+    async function Update_Complete(input) {
         let complete = 'no';
         input.checked === true ? complete = 'si' : complete = 'no';
-
         let data_send = '?id=' + input.getAttribute('data-id') + '&complete=' + complete;
-        let data_result = await Make_Consult('update' + data_send, 'put');
+        await Make_Consult('update' + data_send, 'put');
     }
 
     //Funciones de Ayuda
@@ -159,19 +174,17 @@ window.addEventListener('load', () => {
     function Validate_Input(input) {
         if (input.checkValidity() !== true) {
             input.classList.add('is-invalid');
+            return false;
 
         } else {
             input.classList.remove('is-invalid');
             input.classList.add('is-valid');
+            return true;
         }
     }
 
     function Delete_Fil_Container(id) {
         document.querySelector(`#fil_container-${id}`).remove();
-    }
-
-    function Convert_Deadline(string) {
-        return string.split('-').reverse().join('/');
     }
 
     function Show_Message_Time(text, icon = 'success', timer = 1000) {
@@ -193,8 +206,8 @@ window.addEventListener('load', () => {
         });
     }
 
-    function Insert_Table(template, body_element, element, convert_deadline = true) {
-        //Referencias al Template
+    function Insert_Table(template, body_element, element) {
+        //References to the Template
         const clone_template = template.content.cloneNode(true);
         let fil_container = clone_template.querySelector('#fil_container');
         let fil_id = clone_template.querySelector('#fil_id');
@@ -203,43 +216,49 @@ window.addEventListener('load', () => {
         let fil_name = clone_template.querySelector('#fil_name');
         let fil_deadline = clone_template.querySelector('#fil_deadline');
         let fil_complete = clone_template.querySelector('#fil_complete .form-check-input');
+        let input_name = fil_name.querySelector('.name');
+        let input_deadline = fil_deadline.querySelector('.deadline');
 
-        //Llenar Campos
+        //Fill fields
         fil_id.textContent = element['id'];
-        fil_name.textContent = element['name'];
 
-        //Verificar si la fecha esta en el formato correcto
-        if (convert_deadline === true) {
-            fil_deadline.textContent = Convert_Deadline(element['deadline']);
-        } else {
-            fil_deadline.textContent = element['deadline'];
-        }
+        input_name.value = element['name'];
+        input_name.setAttribute('data-prev', element['name']);
+        input_name.addEventListener('click', () => input_name.classList.add('input-write'));
+        input_name.addEventListener('blur', () => Lost_Focus(input_name));
+        input_name.addEventListener('keyup', (event) => Update_Name(input_name, event));
 
-        //Verificar estado de la tarea
+        input_deadline.value = element['deadline'];
+        input_deadline.setAttribute('data-prev', element['deadline']);
+        input_deadline.addEventListener('blur', () => Lost_Focus(input_deadline));
+        input_deadline.addEventListener('keydown', (event) => Update_Deadline(input_deadline, event));
+
+
+        //Check task status
         if (element['complete'] === 'si') {
             fil_complete.checked = true;
         }
 
-        //Establecer campos de ID para otras tareas posteriores
+        //Set ID fields for subsequent tasks
         fil_container.setAttribute('id', `fil_container-${element['id']}`);
+        fil_container.setAttribute('data-id', `${element['id']}`);
         fil_check_select.setAttribute('data-id', element['id']);
         fil_check_switch.setAttribute('data-id', element['id']);
         fil_complete.setAttribute('data-id', element['id']);
 
-        //Agregar en el Tbody
+        //Add on Tbody
         body_element.appendChild(clone_template);
 
-        //Poner a la escucha el Botón de Actualizar tarea
-        fil_check_switch.addEventListener('change', () => Update(fil_check_switch));
+        //Listen for the Update Task Button
+        fil_check_switch.addEventListener('change', () => Update_Complete(fil_check_switch));
     }
 
+    //This is a example of fetch with async and await, in other case it's recommended use Axios
     async function Make_Consult(url, method, data = null) {
         return await fetch(`./api/todolist/${url.toLowerCase()}`, {
             method: method.toUpperCase(),
             body: data
         })
-
-            //Respuesta del servidor
             .then(respuesta => {
                 if (respuesta.ok) {
                     return respuesta.json();
@@ -247,14 +266,14 @@ window.addEventListener('load', () => {
                 } else {
                     throw "Error al Ejecutar la Consulta"; //throw = Representamos Error para ponerlo en el Cath
                 }
-            })//Fin Respuesta del Servidor
+            })
 
-            //Datos de la Respuesta
+            //Data 
             .then(data => {
                 return data;
             })
 
-            //Control del error si existe
+            //If it exists, check the error.
             .catch(error => console.error(error));
     }
 });

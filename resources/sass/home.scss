@@ -45,3 +45,25 @@ $color3: #b66ff8;
     border-top: 4px dashed $color1;
     border-radius: 40px;
 }
+
+#fil_name input {
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 4px;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 2px solid transparent;
+}
+
+#fil_deadline input {
+    background-color: transparent;
+    width: fit-content;
+    border: none;
+}
+
+.input-write {
+    border: 2px dashed $color3 !important;
+    text-overflow: ellipsis;
+}
