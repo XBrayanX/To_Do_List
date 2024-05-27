@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
             let data_array = {
                 'id': data_result.data.id,
                 'name': data.get('name'),
-                'deadline': data.get('deadline').replaceAll('-', '/')
+                'deadline': data.get('deadline')
             };
 
             Insert_Table(template, fil_tbody, data_array, false);
